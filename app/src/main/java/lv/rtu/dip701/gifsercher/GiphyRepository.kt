@@ -18,12 +18,20 @@ class GiphyRepository {
         apiService = retrofit.create(GiphyApiService::class.java)
     }
 
-    suspend fun searchGifs(query: String, limit: Int = 20, offset: Int = 0): List<Gif> {
+    suspend fun searchGifs(query: String, page: Int): List<Gif> {
+        val limit = 20 // Number of items to fetch per page
+        val offset = page * limit // Calculate the offset based on the page number
+
         return try {
-            val response = apiService.searchGifs(apiKey = "CDScw3SxneC2xkyXSd7dYZJQ6kyfWqPY", query = query, limit = limit, offset = offset)
+            val response = apiService.searchGifs(
+                apiKey = "CDScw3SxneC2xkyXSd7dYZJQ6kyfWqPY",
+                query = query,
+                limit = limit,
+                offset = offset
+            )
             response.body()?.data ?: emptyList()
         } catch (e: Exception) {
-            // Handle exception
+            // Handle the exception, e.g., logging the error
             emptyList()
         }
     }
